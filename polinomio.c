@@ -3,7 +3,7 @@
 int main(){
     
     int sinais = 0;
-    char polinomio[]= "520x^2-4x^5";
+    char polinomio[]= "5x^2-4x^5";
     int j = 0;
 
     for(int i = 1; i < strlen(polinomio); i++){
