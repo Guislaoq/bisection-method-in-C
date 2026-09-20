@@ -13,4 +13,6 @@ void print_list(list*);
 
 bool extract_terms(char*, list*);
 
+void list_destroy(list*);
+
 #endif

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "polinomio.h"
 
 struct Node{
@@ -45,8 +46,20 @@ bool list_append(list* l, double coeff, double expo){
     return true;      
 }
 
+void list_destroy(list* l){
+    node* current = l->begin;
+    node* next;
+
+    while(current != NULL){
+        next = current->next;
+        free(current);
+        current = next;
+    }
+}
+
 void print_list(list* l){
     if(l->begin != NULL){
+        printf("Number of terms in the polynomial: %d\n", l->size);
         node* current = l->begin;
         while(current != NULL){
             printf("coefficient: %f\n exponent: %f\n", current->coefficient, current->exponent);
@@ -67,8 +80,10 @@ bool extract_terms(char* polynomial, list* l){
 
     for(int i = 0; i < terms + 1; i++){
         bool is_negative = false;
-        int coefficient = 1;
-        int exponent = 1;
+        list* coefficient_list = create_list();
+        list* exponent_list = create_list();
+        double coefficient = 1;
+        double exponent = 1;
 
         if(polynomial[j] == '-' ){
             is_negative = true;
@@ -79,7 +94,7 @@ bool extract_terms(char* polynomial, list* l){
 
         if(polynomial[j] >= '0' && polynomial[j] <= '9'){
             while(polynomial[j] >= '0' && polynomial[j] <= '9'){
-                coefficient = polynomial[j] - 48;
+                list_append(coefficient_list, polynomial[j] - 48, 0); 
                 j++;
             }
         }
@@ -91,13 +106,35 @@ bool extract_terms(char* polynomial, list* l){
         if(polynomial[j] == '^'){
             j++;
             while(polynomial[j] >= '0' && polynomial[j] <= '9'){
-                exponent = polynomial[j] - 48;
+                list_append(exponent_list, 0, polynomial[j] - 48);
                 j++;
             }
         }
 
         if(is_negative)
             coefficient *= -1; 
+
+        if(coefficient_list != NULL){
+            coefficient = 0;
+            int max_exponente_10 = coefficient_list->size-1;
+            node* current = coefficient_list->begin;
+            while(current != NULL){
+                coefficient += current->coefficient * pow(10, max_exponente_10);
+                max_exponente_10--;
+                current = current->next;
+            }
+        }
+
+        if(exponent_list != NULL){
+            exponent = 0;
+            int max_exponente_10 = exponent_list->size-1;
+            node* current = exponent_list->begin;
+            while(current != NULL){
+                exponent += current->exponent * pow(10, max_exponente_10);
+                max_exponente_10--;
+                current = current->next;
+            }
+        }
 
         list_append(l, coefficient, exponent);
 
