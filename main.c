@@ -3,7 +3,8 @@
 
 int main(){
     list* lista = create_list();
-    extract_terms("520x^2-x^52", lista);
+    extract_terms("x^3-x-2", lista);
     print_list(lista);
+    bisection(1, 2, 10, lista);
     return 0;
 }

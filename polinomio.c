@@ -83,7 +83,7 @@ bool extract_terms(char* polynomial, list* l){
         list* coefficient_list = create_list();
         list* exponent_list = create_list();
         double coefficient = 1;
-        double exponent = 1;
+        double exponent = 0;
 
         if(polynomial[j] == '-' ){
             is_negative = true;
@@ -100,6 +100,7 @@ bool extract_terms(char* polynomial, list* l){
         }
         
         if(polynomial[j] == 'x'){
+            exponent = 1;
             j++;
         }
 
@@ -109,12 +110,9 @@ bool extract_terms(char* polynomial, list* l){
                 list_append(exponent_list, 0, polynomial[j] - 48);
                 j++;
             }
-        }
+        } 
 
-        if(is_negative)
-            coefficient *= -1; 
-
-        if(coefficient_list != NULL){
+        if(coefficient_list->begin != NULL){
             coefficient = 0;
             int max_exponente_10 = coefficient_list->size-1;
             node* current = coefficient_list->begin;
@@ -123,9 +121,11 @@ bool extract_terms(char* polynomial, list* l){
                 max_exponente_10--;
                 current = current->next;
             }
+            list_destroy(coefficient_list);
         }
+            
 
-        if(exponent_list != NULL){
+        if(exponent_list->begin != NULL){
             exponent = 0;
             int max_exponente_10 = exponent_list->size-1;
             node* current = exponent_list->begin;
@@ -134,9 +134,50 @@ bool extract_terms(char* polynomial, list* l){
                 max_exponente_10--;
                 current = current->next;
             }
+            list_destroy(exponent_list);
         }
+
+        if(is_negative)
+            coefficient *= -1;
 
         list_append(l, coefficient, exponent);
 
-    }
+        }
+
 }
+
+double continuous_function(list* polynomial, double x){
+    double result = 0;
+    node* current = polynomial->begin;
+    while(current != NULL){
+        result += current->coefficient * pow(x, current->exponent);
+        current = current->next;
+    }
+    free(current);
+    return result; 
+}
+
+double bisection(double intervalo_a, double intervalo_b, int epsilon, list* polynomial){
+    double ponto_medio;
+    double tolerance = pow(10, -epsilon);
+    while (1){
+    
+        ponto_medio = (intervalo_a + intervalo_b)/2;
+        printf("DEBUG: ponto = %f, f(ponto) = %f, tolerancia = %f\n", ponto_medio, continuous_function(polynomial, ponto_medio), tolerance);
+        if(fabs(continuous_function(polynomial, ponto_medio)) < tolerance){
+            if(continuous_function(polynomial, ponto_medio) == 0){
+                printf("A raiz exata da funcao fica em: %f", ponto_medio);
+            }
+            printf("A raiz aproximada eh: %f", ponto_medio);
+            return 0;
+        }
+
+        if(continuous_function(polynomial, intervalo_a) * continuous_function(polynomial, ponto_medio) < 0){
+            intervalo_b = ponto_medio;
+        }else if(continuous_function(polynomial, ponto_medio) * continuous_function(polynomial, intervalo_b) <0){
+            intervalo_a = ponto_medio;
+        }
+    }
+    printf("Error");
+}
+    
