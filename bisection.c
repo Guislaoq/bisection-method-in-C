@@ -62,7 +62,7 @@ void print_list(list* l){
         printf("Number of terms in the polynomial: %d\n", l->size);
         node* current = l->begin;
         while(current != NULL){
-            printf("coefficient: %f\n exponent: %f\n", current->coefficient, current->exponent);
+            printf("coefficient: %lf\n exponent: %lf\n", current->coefficient, current->exponent);
             current = current->next;
         }
     }
@@ -160,16 +160,19 @@ double continuous_function(list* polynomial, double x){
 double bisection(double intervalo_a, double intervalo_b, int epsilon, list* polynomial){
     double ponto_medio;
     double tolerance = pow(10, -epsilon);
+    int i = 1;
+    printf("\n| %-4s | %-22s | %-22s | %-22s | %-22s |\n", "i", "Intervalo A", "Intervalo B", "Ponto Medio", "f(Ponto Medio)");
+    printf("+------+------------------------+------------------------+------------------------+------------------------+\n");
     while (1){
     
         ponto_medio = (intervalo_a + intervalo_b)/2;
-        printf("DEBUG: ponto = %.15lf, f(ponto) = %.15lf, tolerancia = %.15lf\n", ponto_medio, continuous_function(polynomial, ponto_medio), tolerance);
+        printf("| %-4d | %-22.15lf | %-22.15lf | %-22.15lf | %22.15lf |\n", i, intervalo_a, intervalo_b, ponto_medio,continuous_function(polynomial, ponto_medio));
         if(fabs(continuous_function(polynomial, ponto_medio)) < tolerance){
             if(continuous_function(polynomial, ponto_medio) == 0){
-                printf("A raiz exata da funcao fica em: %.15lf", ponto_medio);
+                printf("\nA raiz exata da funcao fica em: %.15lf\n", ponto_medio);
                 return 0;
             }
-            printf("A raiz aproximada eh: %15.lf", ponto_medio);
+            printf("\nA raiz aproximada eh: %15.lf\n", ponto_medio);
             return 0;
         }
 
@@ -178,6 +181,7 @@ double bisection(double intervalo_a, double intervalo_b, int epsilon, list* poly
         }else if(continuous_function(polynomial, ponto_medio) * continuous_function(polynomial, intervalo_b) <0){
             intervalo_a = ponto_medio;
         }
+        i++;
     }
     printf("Error");
 }

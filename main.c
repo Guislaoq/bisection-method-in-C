@@ -7,37 +7,40 @@ int main(){
     double intervalo_a, intervalo_b;
     int n, epsilon;
 
-    printf("Selecione uma opçao:\n");
-    printf("1 - Utilizar o método da bisseçao\n");
-    printf("2 - sair \n");
-    scanf("%d", &n);
+    do{
 
-    switch (n)
-    {
-    case 1:
-        printf("Escreva a função:\n");
-        scanf("%s", polynomial);
-        printf("Informe o intervalo a:\n");
-        scanf("%lf", &intervalo_a);
-        printf("Informe o intervalo b:\n");
-        scanf("%lf", &intervalo_b);
-        printf("Informa o epsilon:\n");
-        scanf("%d", &epsilon);
+        printf("\n|----------------MENU----------------|\n");
+        printf("|1 - Utilizar o metodo da bissecao   |\n");
+        printf("|2 - sair                            |\n");
+        printf("|____________________________________|\n");
+        printf("Selecione uma opcao:\n");
+        scanf("%d", &n);
 
-        //extract_terms(polynomial, lista);
-        //bisection(intervalo_a, intervalo_b, epsilon, lista);
-        break;
-    case 2:
+            switch (n)
+        {
+        case 1:
 
-        break;
-    default:
-        break;
-    }
+            printf("\nDigite a funcao continua f(x) sem espacos (ex: x^3-x-2 ou 2x^4+3x^2-1):\n");
+            scanf("%s", polynomial);
+            printf("\nInforme o intervalo a e b separado por espaco (ex: '1 2' ou  '5 10'):\n");
+            scanf("%lf %lf", &intervalo_a, &intervalo_b);
+            printf("\nInforma o epsilon:\n");
+            scanf("%d", &epsilon);
+            extract_terms(polynomial, lista);
+            bisection(intervalo_a, intervalo_b, epsilon, lista);
+            break;
 
+        case 2:
 
+            printf("Programa encerrado");
+            break;
 
-    extract_terms(polynomial, lista);
-    print_list(lista);
-    bisection(intervalo_a, intervalo_b, epsilon, lista);
+        default:
+            break;
+        }
+
+    }while (n != 2);
+    
+
     return 0;
 }
