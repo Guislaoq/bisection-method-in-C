@@ -65,7 +65,9 @@ void print_list(list* l){
             printf("coefficient: %lf\n exponent: %lf\n", current->coefficient, current->exponent);
             current = current->next;
         }
+        return;
     }
+    printf("erro\n");
 }
 
 bool extract_terms(char* polynomial, list* l){
@@ -153,26 +155,27 @@ double continuous_function(list* polynomial, double x){
         result += current->coefficient * pow(x, current->exponent);
         current = current->next;
     }
-    free(current);
     return result; 
 }
 
-double bisection(double intervalo_a, double intervalo_b, int epsilon, list* polynomial){
-    double ponto_medio;
+double bisection(double intervalo_a, double intervalo_b, double epsilon, list* polynomial){
+    double ponto_medio, ponto_medio_anterior = 0;
     double tolerance = pow(10, -epsilon);
+    double episill;
     int i = 1;
-    printf("\n| %-4s | %-22s | %-22s | %-22s | %-22s |\n", "i", "Intervalo A", "Intervalo B", "Ponto Medio", "f(Ponto Medio)");
+    printf("\n| %-4s | %-22s | %-22s | %-22s | %-22s | %-22s |\n", "i", "Intervalo A", "Intervalo B", "Ponto Medio", "f(Ponto Medio)", "Epsilon");
     printf("+------+------------------------+------------------------+------------------------+------------------------+\n");
     while (1){
     
         ponto_medio = (intervalo_a + intervalo_b)/2;
-        printf("| %-4d | %-22.15lf | %-22.15lf | %-22.15lf | %22.15lf |\n", i, intervalo_a, intervalo_b, ponto_medio,continuous_function(polynomial, ponto_medio));
-        if(fabs(continuous_function(polynomial, ponto_medio)) < tolerance){
+        episill = fabs(ponto_medio - ponto_medio_anterior);
+        printf("| %-4d | %-22.15lf | %-22.15lf | %-22.15lf | %22.15lf | %22.15lf |\n", i, intervalo_a, intervalo_b, ponto_medio, continuous_function(polynomial, ponto_medio), episill);
+        if( episill < tolerance){
             if(continuous_function(polynomial, ponto_medio) == 0){
                 printf("\nA raiz exata da funcao fica em: %.15lf\n", ponto_medio);
                 return 0;
             }
-            printf("\nA raiz aproximada eh: %15.lf\n", ponto_medio);
+            printf("\nA raiz aproximada eh: %.15lf\n", ponto_medio);
             return 0;
         }
 
@@ -181,6 +184,7 @@ double bisection(double intervalo_a, double intervalo_b, int epsilon, list* poly
         }else if(continuous_function(polynomial, ponto_medio) * continuous_function(polynomial, intervalo_b) <0){
             intervalo_a = ponto_medio;
         }
+        ponto_medio_anterior = ponto_medio;
         i++;
     }
     printf("Error");

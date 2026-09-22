@@ -15,6 +15,8 @@ bool extract_terms(char*, list*);
 
 void list_destroy(list*);
 
-double bisection(double, double, int, list*);
+double continuous_function(list*, double);
+
+double bisection(double, double, double, list*);
 
 #endif

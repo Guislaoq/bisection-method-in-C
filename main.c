@@ -2,13 +2,12 @@
 #include "bisection.h"
 
 int main(){
-    list* lista = create_list();
     char polynomial[100];
-    double intervalo_a, intervalo_b;
-    int n, epsilon;
+    double intervalo_a, intervalo_b, epsilon;
+    int n;
 
     do{
-
+        list* lista = create_list();
         printf("\n|----------------MENU----------------|\n");
         printf("|1 - Utilizar o metodo da bissecao   |\n");
         printf("|2 - sair                            |\n");
@@ -25,9 +24,10 @@ int main(){
             printf("\nInforme o intervalo a e b separado por espaco (ex: '1 2' ou  '5 10'):\n");
             scanf("%lf %lf", &intervalo_a, &intervalo_b);
             printf("\nInforma o epsilon:\n");
-            scanf("%d", &epsilon);
+            scanf("%lf", &epsilon);
             extract_terms(polynomial, lista);
             bisection(intervalo_a, intervalo_b, epsilon, lista);
+            list_destroy(lista);
             break;
 
         case 2:
@@ -41,6 +41,6 @@ int main(){
 
     }while (n != 2);
     
-
+    
     return 0;
 }
