@@ -163,12 +163,13 @@ double bisection(double intervalo_a, double intervalo_b, int epsilon, list* poly
     while (1){
     
         ponto_medio = (intervalo_a + intervalo_b)/2;
-        printf("DEBUG: ponto = %f, f(ponto) = %f, tolerancia = %f\n", ponto_medio, continuous_function(polynomial, ponto_medio), tolerance);
+        printf("DEBUG: ponto = %.15lf, f(ponto) = %.15lf, tolerancia = %.15lf\n", ponto_medio, continuous_function(polynomial, ponto_medio), tolerance);
         if(fabs(continuous_function(polynomial, ponto_medio)) < tolerance){
             if(continuous_function(polynomial, ponto_medio) == 0){
-                printf("A raiz exata da funcao fica em: %f", ponto_medio);
+                printf("A raiz exata da funcao fica em: %.15lf", ponto_medio);
+                return 0;
             }
-            printf("A raiz aproximada eh: %f", ponto_medio);
+            printf("A raiz aproximada eh: %15.lf", ponto_medio);
             return 0;
         }
 
