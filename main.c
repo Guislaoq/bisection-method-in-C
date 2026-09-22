@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "polinomio.h"
+#include "bisection.h"
 
 int main(){
     list* lista = create_list();
